@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import FeedbackResponse from './FeedbackResponse';
 
 const RatingScale = () => {
     const scale: number[] = [];
@@ -24,20 +25,20 @@ const RatingScale = () => {
         }
     };
 
-    const displayedSelectedRating: number | null =
-        selectedRating !== null ? selectedRating * 0.5 : null;
-
     return (
         <Wrapper>
-            <QuestionText>
-                How many stars would you give to our Online Code Editor?
-            </QuestionText>
             <Scale>
                 {scale.map((rating, index) => {
+                    let side = 'right';
+                    let gapWidth = '2.5rem';
+
+                    if (index % 2 === 0) {
+                        side = 'left';
+                        gapWidth = '0';
+                    }
+
                     const starColor: string =
                         rating > (hoveredRating as number) ? 'grey' : 'yellow';
-
-                    const side: string = index % 2 === 0 ? 'left' : 'right';
 
                     const imageFilename = starColor + '-' + side + '.png';
 
@@ -48,22 +49,26 @@ const RatingScale = () => {
                             onMouseOver={() => handleHover(rating)}
                             onClick={() => handleClick(rating)}
                             onMouseLeave={handleLeave}
+                            style={{
+                                paddingRight: gapWidth,
+                            }}
                         />
                     );
                 })}
             </Scale>
-            <div>Selected Rating: {displayedSelectedRating}</div>
+            <FeedbackResponse rating={selectedRating as number} />
         </Wrapper>
     );
 };
 
-const Wrapper = styled.div``;
-
-const QuestionText = styled.div``;
-
-const Scale = styled.div`
-    display: flex;
+const Wrapper = styled.div`
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem 0;
 `;
+
+const Scale = styled.div``;
 
 const Rating = styled.img`
     height: 4.593rem;
